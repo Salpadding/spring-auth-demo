@@ -1,0 +1,30 @@
+server:
+  port: 10002
+
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: resource
+          uri: http://127.0.0.1:10003
+          predicates:
+            - Path=/api/v1/resource/**
+      default-filters: TokenRelay
+
+  security:
+    oauth2:
+      client:
+        provider:
+          spring:
+            issuer-uri: http://127.0.0.1:10001
+        registration:
+          spring:
+            provider: spring
+            client-id: oidc-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            scope: openid,profile
+
